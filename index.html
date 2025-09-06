@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Répartition des Parts - Capital Initial</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f7f9;
+            color: #333;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 15px;
+        }
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .chart-wrapper {
+            width: 45%;
+            min-width: 300px;
+            margin: 15px;
+        }
+        .summary {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #3498db;
+        }
+        .summary h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        @media (max-width: 768px) {
+            .chart-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Répartition des Parts du Capital Initial</h1>
+        
+        <div class="summary">
+            <h2>Capital Initial: 500 000 FCFA</h2>
+            <p>Ce diagramme illustre la répartition des parts entre les différents profils d'associés.</p>
+        </div>
+        
+        <div class="chart-container">
+            <div class="chart-wrapper">
+                <canvas id="partDistributionChart"></canvas>
+            </div>
+            <div class="chart-wrapper">
+                <canvas id="contributionChart"></canvas>
+            </div>
+        </div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Profil</th>
+                    <th>% Parts</th>
+                    <th>Nombre de parts</th>
+                    <th>Apport en numéraire (FCFA)</th>
+                    <th>Responsabilité</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Expert Informatique</td>
+                    <td>30%</td>
+                    <td>30</td>
+                    <td>150 000</td>
+                    <td>Développement, maintenance, sécurité technique</td>
+                </tr>
+                <tr>
+                    <td>Stratégie, Management & Données</td>
+                    <td>20%</td>
+                    <td>20</td>
+                    <td>100 000</td>
+                    <td>Business model, KPI, coordination, analyse données, stratégie de développement</td>
+                </tr>
+                <tr>
+                    <td>Communication & Marketing</td>
+                    <td>15%</td>
+                    <td>15</td>
+                    <td>75 000</td>
+                    <td>Campagnes marketing, gestion marque, communication digitale</td>
+                    </tr>
+                <tr>
+                    <td>Commercial & Partenariats</td>
+                    <td>15%</td>
+                    <td>15</td>
+                    <td>75 000</td>
+                    <td>Prospection ateliers, suivi relations, développement partenariats</td>
+                </tr>
+                <tr>
+                    <td>Finance & Comptabilité</td>
+                    <td>10%</td>
+                    <td>10</td>
+                    <td>50 000</td>
+                    <td>Trésorerie, module caisse, tarification</td>
+                </tr>
+                <tr>
+                    <td>Relation Client & Support Utilisateur</td>
+                    <td>10%</td>
+                    <td>10</td>
+                    <td>50 000</td>
+                    <td>Support, FAQ, collecte retours</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Data for the charts
+            const profiles = [
+                'Expert Informatique',
+                'Stratégie, Management & Données',
+                'Communication & Marketing',
+                'Commercial & Partenariats',
+                'Finance & Comptabilité',
+                'Relation Client & Support Utilisateur'
+            ];
+            
+            const percentages = [30, 20, 15, 15, 10, 10];
+            const contributions = [150000, 100000, 75000, 75000, 50000, 50000];
+            const colors = [
+                '#3498db', '#2ecc71', '#e74c3c', '#f39c12', '#9b59b6', '#1abc9c'
+            ];
+            
+            // Part Distribution Chart
+            const partCtx = document.getElementById('partDistributionChart').getContext('2d');
+            new Chart(partCtx, {
+                type: 'pie',
+                data: {
+                    labels: profiles,
+                    datasets: [{
+                        data: percentages,
+                        backgroundColor: colors,
+                        borderColor: 'white',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Répartition des Parts (%)',
+                            font: { size: 16 }
+                        },
+                        legend: {
+                            position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // Contribution Chart
+            const contributionCtx = document.getElementById('contributionChart').getContext('2d');
+            new Chart(contributionCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: profiles,
+                    datasets: [{
+                        data: contributions,
+                        backgroundColor: colors,
+                        borderColor: 'white',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Apports en Numéraire (FCFA)',
+                            font: { size: 16 }
+                        },
+                        legend: {position: 'right'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw.toLocaleString() + ' FCFA';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
